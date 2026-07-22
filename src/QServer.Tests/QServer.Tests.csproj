@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>QServer.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QServer.Core\QServer.Core.csproj" />
+    <ProjectReference Include="..\QServer\QServer.csproj" />
+  </ItemGroup>
+
+  <!--
+    The lifecycle tests drive the real built executables, so they must exist before the tests run.
+    FakeServer stands in for the Bannerlord server; its assembly is not referenced, only built.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\FakeServer\FakeServer.csproj" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an idea for QServer
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: The friction you're hitting today. "It would be nice" is fine too.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Config tweaks, existing commands, or other tools you tried.

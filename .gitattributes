@@ -1,0 +1,18 @@
+# Normalize line endings: LF in the repo, native on checkout.
+* text=auto
+
+*.cs      text
+*.csproj  text
+*.props   text
+*.json    text
+*.md      text
+*.yml     text
+*.gitattributes text
+*.gitignore     text
+*.editorconfig  text
+
+# Windows scripts stay CRLF; shell scripts stay LF.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh  text eol=lf

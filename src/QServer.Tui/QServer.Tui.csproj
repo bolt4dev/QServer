@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <AssemblyName>QServer.Tui</AssemblyName>
+    <RootNamespace>QServer.Tui</RootNamespace>
+    <Product>QServer</Product>
+    <Authors>qruz</Authors>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
+    <ProjectReference Include="..\QServer.Core\QServer.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <AssemblyName>QServer.Core</AssemblyName>
+    <RootNamespace>QServer</RootNamespace>
+    <Product>QServer</Product>
+    <Authors>qruz</Authors>
+    <Description>QServer core: portable, UI- and platform-agnostic pipeline, config and abstractions.</Description>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+  <!-- Expose internals (e.g. AppEngine.DescribeExit) to the test assembly so exit-code mapping is unit-testable
+       without widening its public surface. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="QServer.Tests" />
+  </ItemGroup>
+
+</Project>

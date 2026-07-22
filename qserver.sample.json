@@ -1,0 +1,108 @@
+{
+  // QServer configuration.
+  // Copy this file next to QServer.exe as "qserver.json" and edit it. If it is missing, the
+  // built-in defaults (identical to this file) are used. Comments and trailing commas are allowed.
+
+  "server": {
+    // Path to the dedicated-server starter and its command line. Tip: set "argsFromBat" to your existing
+    // start.bat instead and QServer will read exePath/args/workingDirectory from it.
+    "exePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server\\DedicatedCustomServer.Starter.exe",
+    "args": "/dedicatedcustomserverconfigfile server_config.txt _MODULES_*Native*Multiplayer*_MODULES_",
+    "argsFromBat": null,
+    "workingDirectory": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mount & Blade II Dedicated Server\\bin\\Win64_Shipping_Server",
+    "readySentinel": "is ready! You can now enter console commands",
+    "killOrphansOnStart": true,   // kill leftover server/scraper processes from a previous run
+    // NOTE: if you set singleInstance=false to run multiple panels for the SAME server exe, also set
+    // killOrphansOnStart=false — otherwise the second panel's startup sweep kills the first panel's
+    // running server (both resolve to the same exe path).
+    "singleInstance": true,       // refuse a second panel for the same server exe
+    "startupWarnSeconds": 90      // warn if the ready sentinel hasn't appeared by then
+  },
+
+  "scraper": {
+    "path": "",                 // empty = QServer.Scraper.exe next to the app
+    "pollMs": 50,               // how often the server console is polled
+    "readbackLines": 1024,      // rows re-read each poll to detect new lines
+    "bufferWidth": 320,         // wider console buffer = long lines are not split into fragments
+    "bufferHeight": 30000,      // taller scrollback = fast spam wraps (and is lost) later
+    "hideServerWindow": true,   // hide the server's console window; only QServer's UI is shown
+    "hideDelayMs": 1500,        // earliest ms after spawn the server window may be hidden (also gated on first output)
+    "attachTimeoutMs": 15000    // console-attach retry budget (was a hard-coded 3s)
+  },
+
+  "ui": {
+    "refreshMs": 120,
+    "scrollbackLines": 6000,    // how many processed lines are kept for scrolling
+    "wheelScrollLines": 3,      // lines per mouse-wheel notch
+    "showSplash": true,
+    "showServerInfo": true      // live "Server" strip at the top (ServerName, Map, passwords, ...)
+  },
+
+  "restart": {
+    "enabled": false,           // true = QServer restarts the server when it exits (watchdog)
+    "initialDelaySeconds": 3,
+    "maxDelaySeconds": 60,
+    "multiplier": 2.0,
+    "maxRestartsPerWindow": 5,  // crash-loop guard
+    "restartWindowMinutes": 10,
+    "rebindGraceSeconds": 2     // wait after the old server is confirmed dead before the next start (frees UDP port / lobby session)
+  },
+
+  "noise": {
+    "duplicateCollapse": true,
+    "defaultThrottleSeconds": 10,
+    "spamMeterWindowSeconds": 5,
+    // Rules are evaluated top to bottom; the first match wins. Match is a regex tested against the line AFTER its
+    // "[HH:MM:SS.fff]" prefix is stripped. action: hide | throttle | collapse | highlight | pass.
+    "rules": [
+      // --- keep passwords out of the shareable log (they still show in the live Server panel) ---
+      { "match": "^--(Changed|Value of):\\s*(Game|Admin)Password", "action": "hide" },
+
+      // --- classic startup / shutdown spam: hidden from the screen AND from QServer's log ---
+      { "match": "^\\s*$", "action": "hide" },
+      { "match": "^Loading xml file:", "action": "hide" },
+      { "match": "^Loading assembly:", "action": "hide" },
+      { "match": "^Assembly load result:", "action": "hide" },
+      { "match": "^Unable to find item to add dependency", "action": "hide" },
+      { "match": "^Couldn't find \\.dll:", "action": "hide" },
+      { "match": "^LoadWithFullPath", "action": "hide" },
+      { "match": "^Loading localized text xml:", "action": "hide" },
+      { "match": "^opening ", "action": "hide" },
+      { "match": "^reading .* xml files", "action": "hide" },
+      { "match": "^file: ", "action": "hide" },
+      { "match": "^Loading packages", "action": "hide" },
+      { "match": "^Loading done", "action": "hide" },
+      { "match": "Mono Loading Step::", "action": "hide" },
+      { "match": "^Registering items", "action": "hide" },
+      { "match": "^Initializing items", "action": "hide" },
+      { "match": "^Creating module", "action": "hide" },
+      { "match": "^Module Initialize", "action": "hide" },
+      { "match": "^try_to_get_cache_save_privilege", "action": "hide" },
+      { "match": "^Dumping resource usage", "action": "hide" },
+      { "match": "^#(RT|DT|Data) textures", "action": "hide" },
+      { "match": "^Deleting resources", "action": "hide" },
+      { "match": "^Messagebox \\[ERROR\\] message: Cannot load:", "action": "hide" },
+      { "match": "Could not load file or assembly", "action": "hide" },
+      { "match": "^Could not find the event index for:", "action": "hide" },
+      { "match": "^Combat parameter added:", "action": "hide" },
+      { "match": "reading combat parameters file", "action": "hide" },
+
+      // --- runtime spam: throttled to at most once per interval, with a "(xN)" summary ---
+      { "match": "AliveMessage", "action": "throttle", "throttleSeconds": 30, "severity": "info" },
+      { "match": "^ClientRestSessionTask::", "action": "throttle", "throttleSeconds": 30, "severity": "info" },
+      { "match": "Handler not found for network message", "action": "throttle", "throttleSeconds": 5, "severity": "warn", "meter": "spam" },
+      { "match": "^error ", "action": "throttle", "throttleSeconds": 5, "severity": "warn" },
+
+      // --- useful markers: highlighted ---
+      { "match": "is ready! You can now enter console commands", "action": "highlight", "severity": "info" }
+    ]
+  },
+
+  "logging": {
+    "enabled": true,            // QServer's own filtered log (mirrors the shown output)
+    "path": "logs/server.log",
+    "maxFileSizeMb": 50,
+    "retainedFiles": 14,
+    "hostLogPath": "logs/host.log"  // lifecycle log: spawn/attach/ready/exit/kill evidence
+  }
+}

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <AssemblyName>QServer</AssemblyName>
+    <RootNamespace>QServer</RootNamespace>
+    <Product>QServer</Product>
+    <Authors>qruz</Authors>
+    <Company>qruz</Company>
+    <Description>QServer - a better console for the Bannerlord dedicated server. Made by qruz for the Bannerlord MP community.</Description>
+    <Copyright>made by qruz for the Bannerlord MP community</Copyright>
+    <Version>1.1.0</Version>
+    <RepositoryUrl>https://github.com/bolt4dev/QServer</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
+    <ProjectReference Include="..\QServer.Core\QServer.Core.csproj" />
+    <ProjectReference Include="..\QServer.Tui\QServer.Tui.csproj" />
+    <!-- Build the scraper first (ordering only; its assembly is not referenced). -->
+    <ProjectReference Include="..\QServer.Scraper\QServer.Scraper.csproj" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+  <!-- Copy the scraper next to the app so it is found at runtime with no hard-coded path. Fail loudly if missing. -->
+  <Target Name="CopyScraper" AfterTargets="Build">
+    <ItemGroup>
+      <_ScraperOut Include="..\QServer.Scraper\bin\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\QServer.Scraper.*" />
+    </ItemGroup>
+    <Error Condition="'@(_ScraperOut)' == ''"
+           Text="Scraper output not found under ..\QServer.Scraper\bin\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\ - build QServer.Scraper first." />
+    <Copy SourceFiles="@(_ScraperOut)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

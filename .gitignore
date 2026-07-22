@@ -1,0 +1,40 @@
+# Build output
+bin/
+obj/
+
+# Local deploy / release folders
+run/
+dist/
+publish/
+ship/
+
+# IDE / editor
+.vs/
+.idea/
+*.user
+*.suo
+*.DotSettings.user
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs / local config
+logs/
+*.log
+qserver.json
+
+# Packaged release archive (build artifact)
+ship.rar
+
+# SDD scratch
+.superpowers/
+
+# Internal dev-process docs (superpowers scratch)
+docs/superpowers/
+
+# Release staging / packaged artifacts
+/release/
+
+# Windows tool crash dumps
+*.stackdump

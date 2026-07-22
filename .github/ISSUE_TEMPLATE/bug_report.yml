@@ -1,0 +1,63 @@
+name: Bug report
+description: Something in QServer isn't working
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! QServer keeps its own diagnostics — please attach the
+        `logs/host.log` excerpt below (and `logs/server.log` if the noise pipeline is involved).
+        **Redact `GamePassword` / `AdminPassword` before pasting anything.**
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start QServer with ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: QServer version
+      description: Run `QServer.exe --version`.
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: e.g. Windows Server 2022 21H2 / Windows 11 23H2
+    validations:
+      required: true
+  - type: dropdown
+    id: launch
+    attributes:
+      label: How do you run it?
+      options:
+        - start.bat / QServer.exe in a real terminal (RDP)
+        - Some background / keep-session-alive setup
+        - Other (describe above)
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant qserver.json
+      description: The server / scraper / restart sections. REMOVE GamePassword and AdminPassword first.
+      render: jsonc
+  - type: textarea
+    id: hostlog
+    attributes:
+      label: logs/host.log excerpt
+      description: The lifecycle lines around the failure (panel start, HOST START, SERVER PID, attach, READY/EXIT/FAIL, SWEEP, KILLED).
+      render: text
